@@ -1,0 +1,18 @@
+ScheduledFutureTask
+DelayedWorkQueue
+
+
+* Thread designated to wait for the task at the head of the
+* queue.  This variant of the Leader-Follower pattern
+* (http://www.cs.wustl.edu/~schmidt/POSA/POSA2/) serves to
+* minimize unnecessary timed waiting.  When a thread becomes
+* the leader, it waits only for the next delay to elapse, but
+* other threads await indefinitely.  The leader thread must
+* signal some other thread before returning from take() or
+* poll(...), unless some other thread becomes leader in the
+* interim.  Whenever the head of the queue is replaced with a
+* task with an earlier expiration time, the leader field is
+* invalidated by being reset to null, and some waiting
+* thread, but not necessarily the current leader, is
+* signalled.  So waiting threads must be prepared to acquire
+* and lose leadership while waiting.
