@@ -1,35 +1,36 @@
-1 HashMap结构上实现了Map接口，继承了AbstractMap，同时实现了Cloneable,Serializable接口。相关接口还有
-2 Map接口定义了HashMap的基本操作，有查询，size(),get(K),contains(K), 修改，put(K,V),putAll(K,V)，
-  Map接口同时定义了内部接口Entry代表KV对。
-3 AbstractMap是Map接口的最小实现，里面实现了通用Map的equals，toString,hashCode方法，使得HashMap不需要实现这些方法。通过AbstractMap，
-  可以实现可变的Map和不可变的Map。
-4 HashMap内部结构分为四个部分：
-    1 Entry对象：Node(包级可见的静态成员类)
-                TreeNode(包级可见终结的静态成员类) (find(),rotateLeft(),rotateRight(),balanceInsertion(),balanceDeletion(),)
-    2 迭代器：HashIterator作为抽象类，有KeyIterator(包级可见终结的成员类)，ValueIterator(包级可见终结的成员类)，EntryIterator(包级可见终结的成员类)  
-    3 分割器：HashMapSpliterator作为静态类，有KeySpliterator，ValueSpliterator，EntrySpliterator
+1. HashMap结构上实现了Map接口，继承了AbstractMap，同时实现了Cloneable,Serializable接口。相关接口还有
+
+2. Map接口定义了HashMap的基本操作，有查询，size(),get(K),contains(K), 修改，put(K,V),putAll(K,V)，Map接口同时定义了内部接口Entry代表KV对。
+
+3. AbstractMap是Map接口的最小实现，里面实现了通用Map的 equals，toString,hashCode方法，使得HashMap不需要实现这些方法。通过AbstractMap，可以实现可变的Map和不可变的Map。
+
+4. HashMap内部结构分为四个部分：
+    1. Entry对象：Node(包级可见的静态成员 TreeNode(包级可见终结的静态成员类) (find(),rotateLeft(),rotateRight(),balanceInsertion()
+       ,balanceDeletion(),)
+
+    2. 迭代器：HashIterator作为抽象类，有KeyIterator(包级可见终结的成员类)，ValueIterator(包级可见终结的成员类)，EntryIterator(包级可见终结的成员类)  
+    3. 分割器：HashMapSpliterator作为静态类，有KeySpliterator，ValueSpliterator，EntrySpliterator
        数据访问器：1 迭代器把hashmap当做list，核心方法是hasNext和next，2 分割器把hashmap当成流，核心方法trySplit和tryAdvance
        体现在接口上就是Iterable，可迭代的包括了Iterator(直接迭代，确定顺序，顺序执行，总数不知，连续且按照固定顺序处理集合元素)
-         和Spliterator(分割迭代-迭代器并行版本-知道源的特征，并行执行，源是否有序，源总数可以优化遍历过程，迭代器不知道源的任何信息，延迟加载，乱序执行，并行执行)
+       和Spliterator(分割迭代-迭代器并行版本-知道源的特征，并行执行，源是否有序，源总数可以优化遍历过程，迭代器不知道源的任何信息，延迟加载，乱序执行，并行执行)
        循环迭代模型，流分割模型
-    4 视图：KeySet,Values,EntrySet三者均为终结的成员类
-    5 遍历HashMap从迭代器到分割器的思考转变
-5 HashMap对于Map的实现 .......
+    4. 视图：KeySet,Values,EntrySet三者均为终结的成员类
+    5. 遍历HashMap从迭代器到分割器的思考转变
 
-
+5. HashMap对于Map的实现 .......
 
 构造函数重载:tableSizeFor(cap)
 
 size()
 isEmpty()
 put(K,V)组成：putVal() { hash(object)
-                      ,resize(),putTreeVal(){balanceInsertion,treeifyBin},afterNodeAccess()}
-    1 hashCode不一样，equals不一样，在tab上。
-    2 hashCode一样，equals一样, 覆盖老值。
-    3 hashCode一样，equals不一样，在链表头结点插入新值。
+,resize(),putTreeVal(){balanceInsertion,treeifyBin},afterNodeAccess()}
+1 hashCode不一样，equals不一样，在tab上。
+2 hashCode一样，equals一样, 覆盖老值。
+3 hashCode一样，equals不一样，在链表头结点插入新值。
 putAll
 get(K)组成：getNode(int hash,Object key) {getTreeNode()}
-remove(K): { removeNode  removeTreeNode{balanceDeletion} }
+remove(K): { removeNode removeTreeNode{balanceDeletion} }
 containsKey(K): { getNode, getTreeNode }
 containsValue(V)
 clear()
@@ -37,15 +38,9 @@ keySet(): KeySet
 values(): Values
 entrySet():EntrySet
 
-
-
-5 HashMap不是线程安全的，因为HashMap里面的变量没有做任何并发控制，导致变量在多线程情况下发生异常。
-6 子类：LinkedHashMap，类似：IdentityHashMap，WeakHashMap，竞品：HashTable, ConcurrentHashMap
-7 Java8的HashMap引入流和分割器的概念，CHM变得search更加复杂了
-
-
-
-
+6. HashMap不是线程安全的，因为HashMap里面的变量没有做任何并发控制，导致变量在多线程情况下发生异常。
+7. 子类：LinkedHashMap，类似：IdentityHashMap，WeakHashMap，竞品：HashTable, ConcurrentHashMap
+8. Java8的HashMap引入流和分割器的概念，CHM变得search更加复杂了
 
 ### Implement note
 
@@ -56,7 +51,7 @@ when bins get too large, they are transformed into bins of
 TreeNodes, each structured similarly to those in
 java.util.TreeMap. Most methods try to use normal bins, but
 relay to TreeNode methods when applicable (simply by checking
-instanceof a node).  Bins of TreeNodes may be traversed and
+instanceof a node). Bins of TreeNodes may be traversed and
 used like any others, but additionally support faster lookup
 when overpopulated. However, since the vast majority of bins in
 normal use are not overpopulated, checking for existence of
@@ -74,7 +69,7 @@ ordered primarily by hashCode, but in the case of ties, if two
 elements are of the same "class C implements Comparable<C>",
 type then their compareTo method is used for ordering. (We
 conservatively check generic types via reflection to validate
-this -- see method comparableClassFor).  The added complexity
+this -- see method comparableClassFor). The added complexity
 of tree bins is worthwhile in providing worst-case O(log n)
 operations when keys either have distinct hashes or are
 orderable, Thus, performance degrades gracefully under
@@ -90,9 +85,9 @@ little difference.)
 Because TreeNodes are about twice the size of regular nodes, we
 use them only when bins contain enough nodes to warrant use
 (see TREEIFY_THRESHOLD). And when they become too small (due to
-removal or resizing) they are converted back to plain bins.  In
+removal or resizing) they are converted back to plain bins. In
 usages with well-distributed user hashCodes, tree bins are
-rarely used.  Ideally, under random hashCodes, the frequency of
+rarely used. Ideally, under random hashCodes, the frequency of
 nodes in bins follows a Poisson distribution
 (http://en.wikipedia.org/wiki/Poisson_distribution) with a
 parameter of about 0.5 on average for the default resizing
@@ -112,7 +107,7 @@ factorial(k)). The first values are:
 8:    0.00000006
 more: less than 1 in ten million
 
-The root of a tree bin is normally its first node.  However,
+The root of a tree bin is normally its first node. However,
 sometimes (currently only upon Iterator.remove), the root might
 be elsewhere, but can be recovered following parent links
 (method TreeNode.root()).
