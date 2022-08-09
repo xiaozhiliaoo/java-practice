@@ -7,7 +7,6 @@
 4. HashMap内部结构分为四个部分：
     1. Entry对象：Node(包级可见的静态成员 TreeNode(包级可见终结的静态成员类) (find(),rotateLeft(),rotateRight(),balanceInsertion()
        ,balanceDeletion(),)
-
     2. 迭代器：HashIterator作为抽象类，有KeyIterator(包级可见终结的成员类)，ValueIterator(包级可见终结的成员类)，EntryIterator(包级可见终结的成员类)  
     3. 分割器：HashMapSpliterator作为静态类，有KeySpliterator，ValueSpliterator，EntrySpliterator
        数据访问器：1 迭代器把hashmap当做list，核心方法是hasNext和next，2 分割器把hashmap当成流，核心方法trySplit和tryAdvance
