@@ -13,5 +13,6 @@
         <module>Practical-Java</module>
         <module>source-code-reading</module>
         <module>modern-java</module>
+        <module>lambda</module>
     </modules>
 </project>

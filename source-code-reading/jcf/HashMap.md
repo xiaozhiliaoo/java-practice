@@ -2,19 +2,19 @@
 
 2. Map接口定义了HashMap的基本操作，有查询，size(),get(K),contains(K), 修改，put(K,V),putAll(K,V)，Map接口同时定义了内部接口Entry代表KV对。
 
-3. AbstractMap是Map接口的最小实现，里面实现了通用Map的 equals，toString,hashCode方法，使得HashMap不需要实现这些方法。通过AbstractMap，可以实现可变的Map和不可变的Map。
+3. AbstractMap是Map接口的最小实现，是模板模式实现。里面实现了通用Map的 equals，toString,hashCode方法，使得HashMap不需要实现这些方法。通过AbstractMap，可以实现可变的Map和不可变的Map。
 
 4. HashMap内部结构分为四个部分：
-    1. Entry对象：Node(包级可见的静态成员 TreeNode(包级可见终结的静态成员类) (find(),rotateLeft(),rotateRight(),balanceInsertion()
+    1. Entry对象【静态成员类】：Node(包级可见的静态成员 TreeNode(包级可见终结的静态成员类) (find(),rotateLeft(),rotateRight(),balanceInsertion()
        ,balanceDeletion(),)
-    2. 迭代器：HashIterator作为抽象类，有KeyIterator(包级可见终结的成员类)，ValueIterator(包级可见终结的成员类)，EntryIterator(包级可见终结的成员类)  
-    3. 分割器：HashMapSpliterator作为静态类，有KeySpliterator，ValueSpliterator，EntrySpliterator
+    2. 视图【非静态成员类】：KeySet,Values,EntrySet三者均为终结的成员内部类
+    3. 迭代器【非静态成员类】：HashIterator作为抽象类，有KeyIterator(包级可见终结的成员类)，ValueIterator(包级可见终结的内部成员类)，EntryIterator(包级可见终结的内部成员类)
+    4. 分割器【静态成员类】：HashMapSpliterator作为静态类，有KeySpliterator，ValueSpliterator，EntrySpliterator
        数据访问器：1 迭代器把hashmap当做list，核心方法是hasNext和next，2 分割器把hashmap当成流，核心方法trySplit和tryAdvance
        体现在接口上就是Iterable，可迭代的包括了Iterator(直接迭代，确定顺序，顺序执行，总数不知，连续且按照固定顺序处理集合元素)
        和Spliterator(分割迭代-迭代器并行版本-知道源的特征，并行执行，源是否有序，源总数可以优化遍历过程，迭代器不知道源的任何信息，延迟加载，乱序执行，并行执行)
-       循环迭代模型，流分割模型
-    4. 视图：KeySet,Values,EntrySet三者均为终结的成员类
-    5. 遍历HashMap从迭代器到分割器的思考转变
+       循环迭代模型，流分割模型。遍历HashMap从迭代器到分割器的思考转变。
+    5. 静态成员类和非静态成员类的理解是理解内部结构核心。非静态成员类用于定义一个Adapter，允许外部类的实例被看成另一个不相关类的实例。Map的视图和迭代器是这样设计的。静态成员类用于公有类的辅助类，私有静态成员用于外表外围类所代表的对象的组件。Map的组件是Entry。
 
 5. HashMap对于Map的实现 .......
 
@@ -40,6 +40,7 @@ entrySet():EntrySet
 6. HashMap不是线程安全的，因为HashMap里面的变量没有做任何并发控制，导致变量在多线程情况下发生异常。
 7. 子类：LinkedHashMap，类似：IdentityHashMap，WeakHashMap，竞品：HashTable, ConcurrentHashMap
 8. Java8的HashMap引入流和分割器的概念，CHM变得search更加复杂了
+9. 骨架模板模式，非静态成员类【视图】适配器模式
 
 ### Implement note
 
