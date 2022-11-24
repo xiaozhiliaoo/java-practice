@@ -12,4 +12,4 @@ java学习。
 
 ## Slides
 
-[Slides](./)
+[Slides](./slides)
